@@ -1,0 +1,36 @@
+{
+  "name": "classroom-events",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "npx concurrently \"npm run watch:compile\" \"npm run watch:run\"",
+    "watch:compile": "swc src --watch --out-dir dist --include-dotfiles --strip-leading-paths",
+    "watch:run": "npx nodemon dist/main.js",
+    "migration:run": "tsx ./src/database/commands/migration-runner.ts --run",
+    "migration:revert": "",
+    "migration:generate": "tsx ./src/database/commands/gen-migration.ts"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "sqlite3": "^5.1.7",
+    "typeorm": "^0.3.20",
+    "winston": "^3.14.2",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^9.0.1",
+    "@swc/cli": "^0.4.1-nightly.20240914",
+    "@swc/core": "^1.7.26",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.5.5",
+    "chokidar": "^3.6.0",
+    "concurrently": "^9.0.1",
+    "nodemon": "^3.1.6",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2"
+  }
+}
