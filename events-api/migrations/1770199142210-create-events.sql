@@ -1,0 +1,12 @@
+-- UP
+CREATE TABLE IF NOT EXISTS events (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    location TEXT NOT NULL,
+    date TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+-- DOWN
+DROP TABLE IF EXISTS events;
