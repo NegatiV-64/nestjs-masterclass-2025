@@ -1,23 +1,27 @@
-import { drizzle } from "drizzle-orm/libsql";
-import { Provider } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { EnvConfig } from "src/shared/configs/env.config";
+import { EnvConfig } from "#/shared/configs/env.config";
 import * as schema from "./schema";
-import { Client, createClient } from "@libsql/client";
+import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { NodePgDatabase } from "drizzle-orm/node-postgres";
+import { drizzle } from "drizzle-orm/node-postgres";
 
-export const DatabaseService = "DatabaseService";
+@Injectable()
+export class DatabaseService {
+  public db: NodePgDatabase<typeof schema>;
 
-export const drizzleProvider: Provider = {
-  provide: DatabaseService,
-  inject: [ConfigService],
-  useFactory: (configService: ConfigService<EnvConfig, true>) => {
-    const dbFileName = configService.get("DB_FILE_NAME", { infer: true });
+  constructor(configService: ConfigService<EnvConfig, true>) {
+    const dbUser = configService.get("DATABASE_USER", { infer: true });
+    const dbPassword = configService.get("DATABASE_PASSWORD", { infer: true });
+    const dbHost = configService.get("DATABASE_HOST", { infer: true });
+    const dbPort = configService.get("DATABASE_PORT", { infer: true });
+    const dbName = configService.get("DATABASE_NAME", { infer: true });
 
-    const client = createClient({ url: dbFileName });
-    const db = drizzle({ client });
+    const dbUrl = `postgresql://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbName}`;
 
-    return db;
-  },
-};
+    const db = drizzle(dbUrl, {
+      schema: schema,
+    });
 
-export type DatabaseClient = ReturnType<typeof drizzle<typeof schema, Client>>;
+    this.db = db;
+  }
+}

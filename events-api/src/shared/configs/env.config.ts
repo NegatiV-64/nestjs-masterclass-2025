@@ -2,7 +2,11 @@ import { z } from "zod";
 
 export const envConfigSchema = z.object({
   APP_PORT: z.coerce.number().int().positive(),
-  DB_FILE_NAME: z.string().min(1),
+  DATABASE_HOST: z.string().min(1),
+  DATABASE_PORT: z.coerce.number().int().positive(),
+  DATABASE_USER: z.string().min(1),
+  DATABASE_PASSWORD: z.string().min(1),
+  DATABASE_NAME: z.string().min(1),
   AUTH_JWT_SECRET: z.string().min(1),
   AUTH_JWT_EXPIRES_IN: z.string().min(1),
 });

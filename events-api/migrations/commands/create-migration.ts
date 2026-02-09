@@ -1,11 +1,11 @@
-import { writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
-import { argv } from 'node:process';
+import { writeFile } from "node:fs/promises";
+import { join } from "node:path";
+import { argv } from "node:process";
 
 async function generateMigration(name: string) {
   const timestamp = new Date().getTime();
 
-  const migrationDir = join(__dirname, '..');
+  const migrationDir = join(__dirname, "..");
   const migrationName = `${timestamp}-${name}.sql`;
 
   const fileContent = `-- UP
@@ -15,7 +15,7 @@ async function generateMigration(name: string) {
 
   await writeFile(join(migrationDir, migrationName), fileContent);
 
-  console.log('Migration created', migrationName);
+  console.log("Migration created", migrationName);
 }
 
 async function bootstrap() {
@@ -23,13 +23,13 @@ async function bootstrap() {
   const fileName = args.at(0);
 
   if (!fileName) {
-    console.error('No migration name provided');
+    console.error("No migration name provided");
     process.exit(1);
   }
 
-  const migrationName = fileName.replace('--name=', '').trim();
+  const migrationName = fileName.replace("--name=", "").trim();
   if (!migrationName) {
-    console.error('Invalid migration name provided');
+    console.error("Invalid migration name provided");
     process.exit(1);
   }
 

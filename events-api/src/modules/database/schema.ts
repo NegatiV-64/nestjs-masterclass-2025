@@ -1,29 +1,41 @@
 import { sql } from "drizzle-orm";
-import { sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { varchar } from "drizzle-orm/pg-core";
 
-export const eventsTable = sqliteTable("events", {
-  id: text("id").primaryKey(),
+import { pgTable, text, uuid, timestamp } from "drizzle-orm/pg-core";
+
+export const eventsTable = pgTable("events", {
+  id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
   description: text("description").notNull(),
   location: text("location").notNull(),
-  date: text("date").notNull(),
-  createdAt: text("created_at")
+  date: timestamp("date", {
+    withTimezone: true,
+  }).notNull(),
+  createdAt: timestamp("created_at", {
+    withTimezone: true,
+  })
     .notNull()
-    .default(sql`(CURRENT_TIMESTAMP)`),
-  updatedAt: text("updated_at")
+    .default(sql`(NOW())`),
+  updatedAt: timestamp("updated_at", {
+    withTimezone: true,
+  })
     .notNull()
-    .default(sql`(CURRENT_TIMESTAMP)`),
+    .default(sql`(NOW())`),
 });
 
-export const usersTable = sqliteTable("users", {
-  id: text("id").primaryKey(),
-  email: text("email").notNull().unique(),
+export const usersTable = pgTable("users", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  email: varchar("email", { length: 320 }).notNull().unique(),
   password: text("password").notNull(),
   role: text("role").notNull().default("user"),
-  createdAt: text("created_at")
+  createdAt: timestamp("created_at", {
+    withTimezone: true,
+  })
     .notNull()
-    .default(sql`(CURRENT_TIMESTAMP)`),
-  updatedAt: text("updated_at")
+    .default(sql`(NOW())`),
+  updatedAt: timestamp("updated_at", {
+    withTimezone: true,
+  })
     .notNull()
-    .default(sql`(CURRENT_TIMESTAMP)`),
+    .default(sql`(NOW())`),
 });
